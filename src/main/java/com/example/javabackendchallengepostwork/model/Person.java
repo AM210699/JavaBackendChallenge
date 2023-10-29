@@ -8,10 +8,7 @@ public class Person implements Comparable<Person> {
     private String name;
     private String telephone;
 
-    public Person(String name, String telephone) {
-        this.name = name;
-        this.telephone = telephone;
-    }
+
 
     public String toString() {
         return "Person{" +

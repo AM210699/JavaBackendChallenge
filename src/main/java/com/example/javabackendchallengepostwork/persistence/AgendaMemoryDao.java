@@ -1,6 +1,7 @@
 package com.example.javabackendchallengepostwork.persistence;
 
 import com.example.javabackendchallengepostwork.model.Person;
+import com.example.javabackendchallengepostwork.service.PhoneFormatter;
 import org.springframework.stereotype.Repository;
 
 import java.util.Set;
@@ -12,7 +13,16 @@ public class AgendaMemoryDao {
 
     private static final SortedSet<Person> peopleSortedSet = new TreeSet<>();
 
+    private final PhoneFormatter  phoneFormatter;
+
+
+    public AgendaMemoryDao(PhoneFormatter phoneFormatter) {
+        this.phoneFormatter = phoneFormatter;
+    }
+
+
     public Person savePerson(Person person) {
+        person.setTelephone(phoneFormatter.format(person.getTelephone()));
         peopleSortedSet.add(person);
         return person;
     }
@@ -20,6 +30,5 @@ public class AgendaMemoryDao {
     public Set<Person> getPeople() {
         return peopleSortedSet;
     }
-
 
 }

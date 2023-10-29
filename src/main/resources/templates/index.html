@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h2>Enter a new record</h2>
+<form th:action="@{/register}" th:object="${person}" method="post">
+    <div>
+        <label for="name">Name: </label>
+        <input id="name" type="text" th:field="*{name}">
+        <div th:if="${#fields.hasErrors('name')}" th:errorclass="error" th:errors="*{name}"></div>
+    </div>
+    <div>
+        <label for="telephone">Telephone: </label>
+        <input id="telephone" type="text" th:field="*{telephone}">
+        <div th:if="${#fields.hasErrors('telephone')}" th:errorclass="error" th:errors="*{telephone}"></div>
+    </div>
+    <input type="submit" th:value="Save"/>
+</form>
+
+<h3>Agenda: </h3>
+
+<ul>
+    <li th:each="register : ${listPeople}" th:text="${ register.getName() + ' ' + register.getTelephone()}"  ></li>
+</ul>
+</body>
+</html>

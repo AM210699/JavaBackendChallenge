@@ -3,38 +3,41 @@ package com.example.javabackendchallengepostwork.controller;
 import com.example.javabackendchallengepostwork.model.Person;
 import com.example.javabackendchallengepostwork.service.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Set;
+import javax.validation.Valid;
 
-@RestController
-@RequestMapping("/agenda")
+@Controller
 public class AgendaController {
 
-
     private final AgendaService agendaService;
+
 
     @Autowired
     public AgendaController(AgendaService agendaService) {
         this.agendaService = agendaService;
     }
 
-    @GetMapping
-    public ResponseEntity<Set<Person>> getPeople(){
-        return ResponseEntity.ok(agendaService.getPeople());
+    @GetMapping({"/", "/index"})
+    public String registerForm(Model model) {
+        model.addAttribute("person", new Person());
+        model.addAttribute("listPeople", agendaService.getPeople());
+
+        return "index";
     }
 
-    @PostMapping
-    public ResponseEntity<Person> savePerson(@RequestBody Person person) {
-        Person result = agendaService.savePerson(person);
+    @PostMapping("/register")
+    public ModelAndView register(@Valid Person person) {
 
-        if (result == null) {
-            return ResponseEntity.badRequest().build();
-        }
+        agendaService.savePerson(person);
 
-        return ResponseEntity.ok(result);
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("listPeople", agendaService.getPeople());
+        return mav;
     }
 
 }
-
